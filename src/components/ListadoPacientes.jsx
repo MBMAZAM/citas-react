@@ -1,11 +1,28 @@
+import { PropTypes } from "prop-types";
 
+import Paciente from "./Paciente";
 
-const ListadoPacientes = () => {
+const ListadoPacientes = ({ pacientes }) => {
   return (
-    <div>
-      <h2>Listado Pacientes</h2>
-    </div>
-  )
-}
+    <div className="md:w-1/2 lg:w-3/5 ">
+      <h2 className="font-black text-3xl text-center">Listado Pacientes</h2>
+      <p className="text-xl mt-5 mb-10 text-center ">
+        Administra tus {""}
+        <span className="text-indigo-600 font-bold ">Pacientes y Citas</span>
+      </p>
 
-export default ListadoPacientes
+
+      <div className="md:h-screen md:overflow-y-scroll">
+        {pacientes.map((paciente) => (
+          <Paciente paciente={paciente} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+ListadoPacientes.propTypes = {
+  pacientes: PropTypes.string,
+};
+
+export default ListadoPacientes;
