@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Error from "./Error";
 
-const Formulario = ({ pacientes, setPacientes }) => {
+const Formulario = ({ pacientes, setPacientes, paciente, setPaciente }) => {
   const [nombre, setNombre] = useState("");
   const [propietario, setPropietario] = useState("");
   const [email, setEmail] = useState("");
@@ -11,6 +11,16 @@ const Formulario = ({ pacientes, setPacientes }) => {
   const [sintomas, setSintomas] = useState("");
 
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (Object.keys(paciente).length > 0) {
+      setNombre(paciente.nombre)
+      setPropietario(paciente.propietario)
+      setEmail(paciente.email)
+      setFecha(paciente.fecha)
+      setSintomas(paciente.sintomas)
+    }
+  }, [paciente])
 
   const generarId = () => {
     const random = Math.random().toString(36).substring(2);
@@ -37,12 +47,25 @@ const Formulario = ({ pacientes, setPacientes }) => {
       email,
       fecha,
       sintomas,
-      id: generarId()
+      // id: generarId()
     };
 
-    setPacientes([...pacientes, ObjetoPaciente]);
+    if (paciente.id) {
+      //Editando el registro
+      ObjetoPaciente.id = paciente.id;
+      const pacientesActualizados = pacientes.map( pacienteState =>  pacienteState.id === paciente.id ? ObjetoPaciente : pacienteState)
 
-    //Reiniciar el formulario
+      setPacientes(pacientesActualizados)
+      setPaciente({})
+
+    } else {
+      ObjetoPaciente.id = generarId();
+      setPacientes([...pacientes, ObjetoPaciente]);
+    }
+
+
+
+    // Reiniciar el formulario
     setNombre("");
     setPropietario("");
     setEmail("");
@@ -160,7 +183,7 @@ const Formulario = ({ pacientes, setPacientes }) => {
 
         <input
           type="submit"
-          value="Agregar Paciente"
+          value={paciente.id ? "Editar Paciente" : "Agregar Paciente"}
           className="text-white bg-indigo-600 font-bold w-full p-3 uppercase hover:bg-indigo-700 cursor-pointer transition-colors"
         />
       </form>
@@ -171,6 +194,7 @@ const Formulario = ({ pacientes, setPacientes }) => {
 Formulario.propTypes = {
   pacientes: PropTypes.array.isRequired,
   setPacientes: PropTypes.func.isRequired,
+  paciente: PropTypes.object.isRequired,
 };
 
 export default Formulario;

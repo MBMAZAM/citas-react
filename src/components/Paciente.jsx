@@ -1,8 +1,16 @@
 import { PropTypes } from "prop-types";
 
-const Paciente = ({ paciente, setPaciente }) => {
+const Paciente = ({ paciente, setPaciente, eliminarPaciente }) => {
 
-  const { nombre, propietario, email, fecha, sintomas } = paciente;
+  const { nombre, propietario, email, fecha, sintomas, id } = paciente;
+
+  const handleEliminar = () => {
+    const respuesta = confirm("¿Estás seguro de eliminar el paciente?");
+
+    if (respuesta) {
+      eliminarPaciente(id);
+    }
+  }
 
   return (
     <>
@@ -30,7 +38,7 @@ const Paciente = ({ paciente, setPaciente }) => {
 
         <div className="flex justify-between max-w-sm mt-10 mx-auto">
           <button type="button" onClick={() => setPaciente(paciente)} className="py-2 px-10 bg-indigo-600 hover:bg-indigo-700 text-white font-bold uppercase rounded-lg">Editar</button>
-          <button type="button" className="py-2 px-10 bg-red-600 hover:bg-red-700 text-white font-bold uppercase rounded-lg">Eliminar</button>
+          <button type="button" onClick={handleEliminar} className="py-2 px-10 bg-red-600 hover:bg-red-700 text-white font-bold uppercase rounded-lg">Eliminar</button>
         </div>
 
       </div>
@@ -41,6 +49,8 @@ const Paciente = ({ paciente, setPaciente }) => {
 
 Paciente.propTypes = {
   paciente: PropTypes.object,
+  setPaciente: PropTypes.func,
+  eliminarPaciente: PropTypes.func,
 };
 
 export default Paciente;
