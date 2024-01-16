@@ -7,7 +7,17 @@ function App() {
   const [pacientes, setPacientes] = useState([]);
   const [paciente, setPaciente] = useState({});
 
-  useEffect( () => {
+  useEffect(() => {
+    const obtenerLS = () => {
+      const pacientesLs = JSON.parse(localStorage.getItem("pacientes")) ?? [];
+
+      setPacientes(pacientesLs);
+    }
+
+    obtenerLS();
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("pacientes", JSON.stringify(pacientes));
   }, [pacientes]);
 
